@@ -2,6 +2,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { Platform } from 'react-native';
 import HomeScreen from '../screens/home/HomeScreen';
 import BookingWrapper from '../screens/booking/BookingWrapper';
 import MisTurnosScreen from '../screens/appointments/MisTurnosScreen';

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Alert, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, Alert, ScrollView, TouchableOpacity, StatusBar, Image, SafeAreaView, TextInput, ActivityIndicator } from 'react-native';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../../services/firebase.config';
-import { Button, Input } from '../../components/ui';
 import { theme } from '../../constants/theme';
 
 const ForgotPasswordScreen = ({ navigation }) => {
@@ -37,84 +36,90 @@ const ForgotPasswordScreen = ({ navigation }) => {
   };
 
   return (
-    <>
-      <StatusBar barStyle="dark-content" backgroundColor={theme.colors.background} />
-      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-        <View style={styles.header}>
-          <View style={styles.iconContainer}>
-            <Text style={styles.icon}>🔐</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar 
+        barStyle="dark-content"
+        backgroundColor={theme.colors.background}
+      />
+      <ScrollView 
+        contentContainerStyle={styles.scrollContainer}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.container}>
+          {/* Logo */}
+          <View style={styles.logoContainer}>
+            <Image 
+              source={require('../../assets/icon-glam.jpeg')}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+            <Text style={styles.sectionTitle}>Recuperar Contraseña</Text>
+            <Text style={styles.subtitle}>Ingresa tu correo para restablecer tu contraseña</Text>
           </View>
-          <Text style={styles.title}>¿Olvidaste tu contraseña?</Text>
-          <Text style={styles.subtitle}>
-            No te preocupes, te ayudamos a recuperarla
-          </Text>
-        </View>
 
-        <View style={styles.form}>
-          <Text style={styles.description}>
-            Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.
-          </Text>
+          {/* Formulario */}
+          <View style={styles.formContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Correo electrónico"
+              placeholderTextColor={theme.colors.text.muted}
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
 
-          <Input
-            label="Correo electrónico"
-            placeholder="tu@email.com"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            leftIcon="mail"
-          />
+            <TouchableOpacity 
+              style={styles.button} 
+              onPress={handleResetPassword}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.buttonText}>Enviar enlace</Text>
+              )}
+            </TouchableOpacity>
+          </View>
 
-          <Button
-            title="Enviar enlace"
-            onPress={handleResetPassword}
-            loading={isLoading}
-            style={styles.resetButton}
-          />
-        </View>
-
-        <View style={styles.footer}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.navigate('Login')}
-          >
-            <Text style={styles.backText}>← Volver al inicio de sesión</Text>
-          </TouchableOpacity>
+          {/* Footer */}
+          <View style={styles.footer}>
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+              <Text style={[styles.footerText, styles.linkText]}>← Volver al inicio de sesión</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
-    </>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  content: {
+  scrollContainer: {
     flexGrow: 1,
-    paddingHorizontal: theme.spacing.lg,
-    paddingTop: theme.spacing.xxl,
-    paddingBottom: theme.spacing.xl,
   },
-  header: {
+  container: {
+    flex: 1,
+    padding: theme.spacing.xl,
+    backgroundColor: theme.colors.background,
+  },
+  logoContainer: {
     alignItems: 'center',
+    marginTop: theme.spacing.xxl,
     marginBottom: theme.spacing.xxl,
   },
-  iconContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: theme.borderRadius.full,
-    backgroundColor: theme.colors.secondary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: theme.spacing.lg,
+  logo: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: theme.spacing.md,
   },
-  icon: {
-    fontSize: 32,
-  },
-  title: {
-    fontSize: theme.typography.sizes.title,
+  sectionTitle: {
+    fontSize: theme.typography.sizes.xl,
     fontWeight: theme.typography.weights.bold,
     color: theme.colors.text.primary,
     marginBottom: theme.spacing.sm,
@@ -124,33 +129,45 @@ const styles = StyleSheet.create({
     fontSize: theme.typography.sizes.md,
     color: theme.colors.text.secondary,
     textAlign: 'center',
+    marginBottom: theme.spacing.xl,
   },
-  form: {
-    flex: 1,
-    justifyContent: 'center',
+  formContainer: {
+    width: '100%',
+    marginBottom: theme.spacing.xl,
   },
-  description: {
-    fontSize: theme.typography.sizes.md,
-    color: theme.colors.text.secondary,
-    textAlign: 'center',
-    lineHeight: 22,
+  input: {
+    height: 50,
+    borderBottomWidth: 1,
+    borderColor: theme.colors.border.light,
     marginBottom: theme.spacing.xl,
     paddingHorizontal: theme.spacing.sm,
+    fontSize: theme.typography.sizes.md,
+    color: theme.colors.text.primary,
+    backgroundColor: 'transparent',
   },
-  resetButton: {
-    marginTop: theme.spacing.lg,
+  button: {
+    backgroundColor: theme.colors.primary,
+    borderRadius: 25,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: theme.spacing.md,
+    ...theme.shadows.sm,
+  },
+  buttonText: {
+    color: theme.colors.text.inverse,
+    fontSize: theme.typography.sizes.md,
+    fontWeight: theme.typography.weights.semiBold,
   },
   footer: {
     alignItems: 'center',
     marginTop: theme.spacing.xl,
-    paddingTop: theme.spacing.lg,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.border.light,
   },
-  backButton: {
-    paddingVertical: theme.spacing.sm,
+  footerText: {
+    color: theme.colors.text.secondary,
+    fontSize: theme.typography.sizes.md,
   },
-  backText: {
+  linkText: {
     fontSize: theme.typography.sizes.sm,
     color: theme.colors.accent,
     fontWeight: theme.typography.weights.medium,
