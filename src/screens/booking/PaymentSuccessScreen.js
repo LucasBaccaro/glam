@@ -13,7 +13,7 @@ const PaymentSuccessScreen = ({ route, navigation }) => {
   const { triggerRefresh } = useApp();
   const { refreshUserData } = useAuth();
 
-  const [countdown, setCountdown] = React.useState(3);
+  const [countdown, setCountdown] = React.useState(10);
   const scaleAnim = React.useRef(new Animated.Value(0)).current;
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
 
@@ -218,7 +218,7 @@ const PaymentSuccessScreen = ({ route, navigation }) => {
 
         <Button
           title="Ver Mis Turnos"
-          variant="outline"
+          variant="secondary"
           onPress={handleGoToAppointments}
           style={styles.secondaryButton}
         />
@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
   paymentCard: {
     marginHorizontal: theme.spacing.lg,
     marginBottom: theme.spacing.lg,
-    backgroundColor: `${theme.colors.status.success}08`,
+    backgroundColor: theme.colors.surface,
   },
   paymentHeader: {
     flexDirection: 'row',
@@ -340,7 +340,7 @@ const styles = StyleSheet.create({
   rewardsCard: {
     marginHorizontal: theme.spacing.lg,
     marginBottom: theme.spacing.lg,
-    backgroundColor: `${theme.colors.status.warning}08`,
+    backgroundColor: theme.colors.surface,
   },
   rewardsHeader: {
     flexDirection: 'row',
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
   reminderCard: {
     marginHorizontal: theme.spacing.lg,
     marginBottom: theme.spacing.lg,
-    backgroundColor: `${theme.colors.accent}08`,
+    backgroundColor: theme.colors.surface,
   },
   reminderHeader: {
     flexDirection: 'row',

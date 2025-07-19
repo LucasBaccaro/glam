@@ -199,7 +199,7 @@ const ConfirmationScreen = ({ route, navigation }) => {
         {/* Cancel Button */}
         <Button
           title="Volver"
-          variant="outline"
+          variant="secondary"
           onPress={() => navigation.goBack()}
           disabled={loading}
           style={styles.cancelButton}
@@ -243,12 +243,12 @@ const styles = StyleSheet.create({
   rewardsCard: {
     marginHorizontal: theme.spacing.lg,
     marginBottom: theme.spacing.lg,
-    backgroundColor: `${theme.colors.status.success}08`,
+    backgroundColor: theme.colors.surface,
   },
   termsCard: {
     marginHorizontal: theme.spacing.lg,
     marginBottom: theme.spacing.lg,
-    backgroundColor: `${theme.colors.status.warning}08`,
+    backgroundColor: theme.colors.surface,
   },
   cardHeader: {
     flexDirection: 'row',
